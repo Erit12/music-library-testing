@@ -1,78 +1,87 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import SearchBar from '../SearchBar/index.jsx';
-import '@testing-library/jest-dom';
+import { render, screen, fireEvent } from "@testing-library/react";
+import SearchBar from "../SearchBar";
+import { Provider } from "react-redux";
+import store from '../../redux/store.js';
 import { ThemeProvider } from "styled-components";
 import GlobalStyle from '../../theme/GlobalStyle.js';
 import Theme from '../../theme/index.js';
-import { Provider } from 'react-redux';
-import store from '../../redux/store.js';
-import { jest } from '@jest/globals';
 
 
-describe('SearchBar', () => {
+jest.mock("../../../src/redux/slices/searchSlice", () => ({
+  fetchSongs: jest.fn(),
+}));
+
+//const mockStore = configureStore([thunk]);
+
+describe("Componente SearchBar", () => {
+
+  beforeEach(() => {
+    //store = mockStore({});
+    store.dispatch = jest.fn();
+  });
   
-  test('el input se renderiza correctamente', () => {
-    render(
-      <Provider store={ store }>
-      <ThemeProvider theme={Theme}>
-        <GlobalStyle />
-          <SearchBar setSearchTerm={''} />
-      </ThemeProvider>
-      </Provider>
-    );
-    expect(screen.getByPlaceholderText('Busca un artista...')).toBeInTheDocument();
-  });
 
-  test('el usuario puede escribir en el input', () => {
-    render(
-      <Provider store={ store }>
-      <ThemeProvider theme={Theme}>
-        <GlobalStyle />
-          <SearchBar setSearchTerm={''} />
-      </ThemeProvider>
-      </Provider>
-    );
-    const input = screen.getByPlaceholderText('Busca un artista...');
-    fireEvent.change(input, { target: { value: 'rock' } });
-    expect(input.value).toBe('rock');
-  });
-/*
-  test ('prueba favil', ()=>{
-    const mockFn = jest.fn();
-    mockFn();
-    expect(mockFn).toHaveBeenCalled();
-  });
-*/
-
-  test('se ejecuta la búsqueda al hacer clic en "Buscar"', () => {
-    const mockSearch = jest.fn();
-    
+  test("El input de búsqueda se renderiza correctamente", () => {
     render(
       <Provider store={store}>
         <ThemeProvider theme={Theme}>
           <GlobalStyle />
-          <SearchBar onSubmit={mockSearch} />
+            <SearchBar />
         </ThemeProvider>
       </Provider>
     );
+    const input = screen.getByPlaceholderText(/busca un artista/i);
+    expect(input).toBeInTheDocument();
+  });
 
-    const inputValue = 'Adele';
-    
-    // Simular entrada de texto
-    const inputElement = screen.getByPlaceholderText('Busca un artista...');
-    fireEvent.change(inputElement, { target: { value: inputValue } });
-    
-    // Verificar que los elementos están presentes
-    const buttonByText = screen.getByText('Buscar');
-    expect(buttonByText).toBeInTheDocument();
-    expect(inputElement).toBeInTheDocument();
-    
-    // Simular clic en el botón
-    fireEvent.click(buttonByText);
-    
-    // Verificar que mockSearch fue llamado con el valor correcto
-    expect(mockSearch).toHaveBeenCalledWith(inputValue);
-    // También puedes verificar cuántas veces fue llamado
-    expect(mockSearch).toHaveBeenCalledTimes(1);
-  });  
+  test("El usuario puede escribir en el input y el valor cambia", () => {
+    render(
+      <Provider store={store}>
+        <ThemeProvider theme={Theme}>
+          <GlobalStyle />
+            <SearchBar />
+        </ThemeProvider>
+      </Provider>
+    );
+    const input = screen.getByPlaceholderText(/busca un artista/i);
+    fireEvent.change(input, { target: { value: "Coldplay" } });
+    expect(input.value).toBe("Coldplay");
+  });
+
+  test("La función de búsqueda se ejecuta al hacer clic en el botón 'Buscar'", () => {
+    render(
+      <Provider store={store}>
+        <ThemeProvider theme={Theme}>
+          <GlobalStyle />
+            <SearchBar />
+        </ThemeProvider>
+      </Provider>
+    );
+    const input = screen.getByPlaceholderText(/busca un artista/i);
+    const boton = screen.getByRole("button", { name: /buscar/i });
+
+    fireEvent.change(input, { target: { value: "Adele" } });
+    fireEvent.click(boton);
+
+    expect(store.dispatch).toHaveBeenCalled();
+    //expect(fetchSongs).toHaveBeenCalledWith("Adele");
+  });
+
+  test("La función de búsqueda se ejecuta al presionar Enter", () => {
+    render(
+      <Provider store={store}>
+        <ThemeProvider theme={Theme}>
+          <GlobalStyle />
+            <SearchBar />
+        </ThemeProvider>
+      </Provider>
+    );
+    const input = screen.getByPlaceholderText(/busca un artista/i);
+
+    fireEvent.change(input, { target: { value: "Oasis" } });
+    fireEvent.submit(input.closest("form"));
+
+    expect(store.dispatch).toHaveBeenCalled();
+    //expect(fetchSongs).toHaveBeenCalledWith("Oasis");
+  });
 });

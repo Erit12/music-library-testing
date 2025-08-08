@@ -1,7 +1,7 @@
 
 import { SongLibraryContainer, RemoveButton } from "./style";
 import { useDispatch } from "react-redux";
-import { removeSong } from "../../redux/libraryActions";
+import { removeSong } from "../../redux/slices/librarySlice"
 
 function Song({ song }) {
 

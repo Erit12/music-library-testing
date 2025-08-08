@@ -25,8 +25,7 @@ function App() {
   const [library, setLibrary] = useState([]);
 
   const addToLibrary = (song) => {
-    console.log("Que cancion agregamos");
-    console.log(song);
+
     if (!library.find((s) => s.idTrack === song.idTrack)) {
       setLibrary([...library, song]);
     }

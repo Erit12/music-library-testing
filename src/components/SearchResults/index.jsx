@@ -1,5 +1,5 @@
 import { TextEncoder, TextDecoder } from 'text-encoding';
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ResultsContainer, ResultTitle, SongBlock, AlbumTitle } from "./style";
 

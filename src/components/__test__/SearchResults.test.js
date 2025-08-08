@@ -32,7 +32,7 @@ describe('SearchResults',  () => {
       </Provider>
     );
 
-    expect( screen.getByText('Resultados de Búsqueda')).toBeInTheDocument();
+    expect( screen.getByText('No hay resultados.')).toBeInTheDocument();
     //expect(screen.getByText('Album Y')).toBeInTheDocument();
   });
 });

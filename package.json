@@ -1,5 +1,5 @@
 {
-  "homepage": ".",
+  "homepage": "https://Erit12.github.io/music-library-testing",
   "name": "music-library-testing",
   "version": "0.1.0",
   "private": true,
@@ -13,9 +13,9 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-redux": "^9.2.0",
-    "react-router": "^7.6.2",
-    "react-router-dom": "^7.6.3",
-    "react-scripts": "5.0.1",
+    "react-router": "^6.30.1",
+    "react-router-dom": "^6.30.1",
+    "react-scripts": "^0.0.0",
     "redux": "^5.0.1",
     "styled-components": "^6.1.19",
     "text-encoding": "^0.7.0",
@@ -27,7 +27,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!music-library-testing)/\" --env=jsdom",
     "test:coverage": "react-scripts test --coverage",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -56,7 +58,9 @@
     "axios-mock-adapter": "^2.1.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^30.0.4",
+    "gh-pages": "^6.3.0",
     "jest": "^27.5.1",
+    "jest-fetch-mock": "^3.0.3",
     "react-test-renderer": "^19.1.0"
   }
 }
